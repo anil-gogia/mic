@@ -1,0 +1,21 @@
+!SESSION 2016-06-16 15:06:50.531 -----------------------------------------------
+eclipse.buildId=4.5.1.M20150904-0015
+java.version=1.8.0_51
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.jee.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.jee.product
+
+!ENTRY org.eclipse.core.resources 4 77 2016-06-16 15:07:59.728
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2016-06-16 15:07:59.728
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2016-06-16 15:07:59.728
+!MESSAGE C:\_Work\LINK\Microservices\Microservice-POC\spring-boot-microservices overlaps the workspace location: C:\_Work\LINK\Microservices\Microservice-POC\spring-boot-microservices\_workspace
+
+!ENTRY org.eclipse.core.resources 4 77 2016-06-16 15:15:56.405
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2016-06-16 15:15:56.405
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2016-06-16 15:15:56.405
+!MESSAGE C:\_Work\LINK\Microservices\Microservice-POC\spring-boot-microservices overlaps the workspace location: C:\_Work\LINK\Microservices\Microservice-POC\spring-boot-microservices\_workspace

@@ -1,0 +1,119 @@
+(1) Build the complete Application
+C:\_Work\LINK\Microservices\Microservice-POC\spring-boot-microservices>mvn clean install
+
+(2) Start Eureka Server   ->>. Running on Port 1111
+C:\_Work\LINK\Microservices\Microservice-POC\spring-boot-microservices\eureka>java -jar target/eureka-0.0.1-SNAPSHOT.jar
+
+(3) Start Zuul Server   ->>> Running on Port 4444
+C:\_Work\LINK\Microservices\Microservice-POC\spring-boot-microservices\zuul-routing-server>java -jar target/zuul-routing-server-0.0.1-SNAPSHOT.jar
+
+(4) Start Notification Service   -->>> 3333
+C:\_Work\LINK\Microservices\Microservice-POC\spring-boot-microservices\notification-service>java -jar target/notification-service-0.0.1-SNAPSHOT.jar
+
+(5) Start User Service     -->>>> 2222
+C:\_Work\LINK\Microservices\Microservice-POC\spring-boot-microservices\user-service>java -jar target/user-service-0.0.1-SNAPSHOT.jar
+
+
+(6) Hit the Eureka Server to check if all the services are registered with it or not
+http://localhost:1111/eureka/apps
+
+<applications>
+  <versions__delta>1</versions__delta>
+  <apps__hashcode>UP_2_</apps__hashcode>
+  <application>
+    <name>NOTIFICATION-SERVICE</name>
+    <instance>
+      <instanceId>LH7U05CG5210277.ms.ds.uhc.com:notification-service:3333</instanceId>
+      <hostName>LH7U05CG5210277.ms.ds.uhc.com</hostName>
+      <app>NOTIFICATION-SERVICE</app>
+      <ipAddr>192.168.0.3</ipAddr>
+      <status>UP</status>
+      <overriddenstatus>UNKNOWN</overriddenstatus>
+      <port enabled="true">3333</port>
+      <securePort enabled="false">443</securePort>
+      <countryId>1</countryId>
+      <dataCenterInfo class="com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo">
+        <name>MyOwn</name>
+      </dataCenterInfo>
+      <leaseInfo>
+        <renewalIntervalInSecs>30</renewalIntervalInSecs>
+        <durationInSecs>90</durationInSecs>
+        <registrationTimestamp>1466013756076</registrationTimestamp>
+        <lastRenewalTimestamp>1466013935771</lastRenewalTimestamp>
+        <evictionTimestamp>0</evictionTimestamp>
+        <serviceUpTimestamp>1466013756076</serviceUpTimestamp>
+      </leaseInfo>
+      <metadata class="java.util.Collections$EmptyMap"/>
+      <homePageUrl>http://LH7U05CG5210277.ms.ds.uhc.com:3333/</homePageUrl>
+      <statusPageUrl>http://LH7U05CG5210277.ms.ds.uhc.com:3333/info</statusPageUrl>
+      <healthCheckUrl>http://LH7U05CG5210277.ms.ds.uhc.com:3333/health</healthCheckUrl>
+      <vipAddress>notification-service</vipAddress>
+      <secureVipAddress>notification-service</secureVipAddress>
+      <isCoordinatingDiscoveryServer>false</isCoordinatingDiscoveryServer>
+      <lastUpdatedTimestamp>1466013756076</lastUpdatedTimestamp>
+      <lastDirtyTimestamp>1466013755686</lastDirtyTimestamp>
+      <actionType>ADDED</actionType>
+    </instance>
+  </application>
+  <application>
+    <name>USER-SERVICE</name>
+    <instance>
+      <instanceId>LH7U05CG5210277.ms.ds.uhc.com:user-service:2222</instanceId>
+      <hostName>LH7U05CG5210277.ms.ds.uhc.com</hostName>
+      <app>USER-SERVICE</app>
+      <ipAddr>192.168.0.3</ipAddr>
+      <status>UP</status>
+      <overriddenstatus>UNKNOWN</overriddenstatus>
+      <port enabled="true">2222</port>
+      <securePort enabled="false">443</securePort>
+      <countryId>1</countryId>
+      <dataCenterInfo class="com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo">
+        <name>MyOwn</name>
+      </dataCenterInfo>
+      <leaseInfo>
+        <renewalIntervalInSecs>30</renewalIntervalInSecs>
+        <durationInSecs>90</durationInSecs>
+        <registrationTimestamp>1466013806177</registrationTimestamp>
+        <lastRenewalTimestamp>1466013925989</lastRenewalTimestamp>
+        <evictionTimestamp>0</evictionTimestamp>
+        <serviceUpTimestamp>1466013806177</serviceUpTimestamp>
+      </leaseInfo>
+      <metadata class="java.util.Collections$EmptyMap"/>
+      <homePageUrl>http://LH7U05CG5210277.ms.ds.uhc.com:2222/</homePageUrl>
+      <statusPageUrl>http://LH7U05CG5210277.ms.ds.uhc.com:2222/info</statusPageUrl>
+      <healthCheckUrl>http://LH7U05CG5210277.ms.ds.uhc.com:2222/health</healthCheckUrl>
+      <vipAddress>user-service</vipAddress>
+      <secureVipAddress>user-service</secureVipAddress>
+      <isCoordinatingDiscoveryServer>false</isCoordinatingDiscoveryServer>
+      <lastUpdatedTimestamp>1466013806177</lastUpdatedTimestamp>
+      <lastDirtyTimestamp>1466013806006</lastDirtyTimestamp>
+      <actionType>ADDED</actionType>
+    </instance>
+  </application>
+</applications>
+
+Eureka console can be accessed from http://localhost:1111/
+
+(7) Hit the user service WITHOUT Zuul server
+POST  http://localhost:2222/service/user
+Content-Type:application/json
+Accepts:application/json
+Payload {"id":"1", "password":"mypassword1"}
+
+Response {"status":"1","message":"Customer has been created sucessfully and an email notification was sent to him"}
+
+(8) Now hit the user service WITH zuul
+POST  http://localhost:4444/public/api/service/user
+// Zuul server is running on port 4444 and within the configuration file of the zuul server, we are routing any request from /public/api/**   to http://localhost:2222  (i.e. the actual user service)
+
+Content-Type:application/json
+Accepts:application/json
+Payload {"id":"1", "password":"mypassword1"}
+
+Response {"status":"1","message":"Customer has been created sucessfully and an email notification was sent to him"}
+
+
+(9) Microservices are able to find eachother with the service name registered with Eureka server.
+In a truly dynamic cloud model where IPs change frequently, Eureka server dynamically
+manages and find the actual service which ever machine it runs on. 
+
